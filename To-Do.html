@@ -1,0 +1,204 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>some</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=AR+One+Sans&family=Agbalumo&family=Black+Ops+One&family=Borel&family=Caprasimo&family=Dancing+Script&family=Dosis:wght@200&family=Gluten:wght@100&family=Lumanosimo&family=Pixelify+Sans:wght@500&family=Roboto+Condensed:wght@300;400&family=Roboto:wght@300&family=Tektur&family=Tilt+Prism&display=swap" rel="stylesheet">
+</head>
+<style>
+
+  :root {
+    --default-font-color: rgb(9, 2, 47);
+    --choosen-color: rgb(0, 0, 0);
+    --mymy: aqua;
+    --hovering: rgb(56, 56, 250);
+    --bg-color: rgb(43, 43, 43);
+    --color: rgb(255, 255, 255);
+  }
+
+  body {
+    background-image: url(image.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: var(--default-font-color);
+    font-family: 'Agbalumo';
+    text-align: center;
+    backdrop-filter: blur(20px);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+  padding-top: 30px;
+  font-family: 'Agbalumo';
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 460px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+#inputFild {
+  padding: 15px 65px;
+  background-color: transparent;
+  outline: 2px solid var(--choosen-color);
+  background-color: var(--bg-color);
+  color: var(--color);
+  /* font-weight: bold; */
+  border: none;
+  border-radius: 10px;
+  text-align: center;
+  font-size: large;
+  font-family: 'Agbalumo';
+}
+
+input::placeholder {
+  text-align: center;
+  padding-right: 10%;
+  color: var(--color);
+  font-weight: bold;
+  color: var(--color);
+  font-family: 'Agbalumo';
+}
+
+#addToDo {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: var(--choosen-color);
+  border: none;
+  border-radius: 5px;
+  outline: 2px solid var(--choosen-color);
+  vertical-align: middle;
+  font-weight: bold;
+  margin-left: 10px;
+  cursor: pointer;
+  font-family: 'Agbalumo';
+}
+
+#addToDO:hover {
+  background-color: var(--bg-color);
+  color: var(--choosen-color);
+  outline: 2px solid var(--choosen-color);
+  transition: all .15s ease-in-out;
+}
+
+#addToDo:active {
+  outline: 2px solid var(--mymy) ;
+  color: var(--mymy);
+}
+
+.to-dos {
+  margin-top: 25px;
+  color: var(--choosen-color);
+  font-weight: bolder;
+}
+
+.paragraph-styling {
+  margin: 0;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--default-font-color);
+}
+
+@media screen and (max-width: 500px) {
+  #inputFild {
+    margin-bottom: 30px;
+  }
+}
+
+</style>
+<body>
+
+  <h1>
+    TO DO List
+  </h1>
+
+  <hr color="#000000" style="width: 80%;max-width: 400px;" />
+
+  <div class="main">
+    <div class="container">
+      <input id="inputFild" type="text" placeholder="TO DO..."> <button id="addToDo">Add</button>
+  
+      <div class="to-dos" id="toDoContainer">
+  
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+
+
+      // Array<string>
+      let store = JSON.parse(localStorage.getItem('store') || '[]');
+
+      let addToDoButton = document.getElementById('addToDo');
+      let toDoContainer = document.getElementById('toDoContainer');
+      let inputFild = document.getElementById('inputFild');
+      
+      /*
+      let cars = ['a', 'b', 'c'];
+      cars.indexOf('b') -> 0
+      cars.indexOf('d') -> -1
+      cars.splice(1, 2)
+      */
+
+      function removeTodo(todo){
+        let index = store.indexOf(todo);
+        if(index > -1) store.splice(index, 1);
+        localStorage.setItem('store', JSON.stringify(store));
+        buildStore();
+      }  
+
+      function renderTodo(todo){
+        var paragraph = document.createElement('p');
+        paragraph.classList.add('paragraph-styling');
+        paragraph.innerText = todo;
+
+        paragraph.addEventListener('click', function() {
+          paragraph.style.textDecoration = 'line-through';
+        })
+        paragraph.addEventListener('dblclick', function() {
+          removeTodo(todo);
+        });
+        
+        toDoContainer.appendChild(paragraph);
+      }
+
+      function addToDo(todo){
+        store.push(todo);
+        localStorage.setItem('store', JSON.stringify(store));
+        buildStore();
+      }
+
+      function buildStore(){
+        toDoContainer.innerHTML = '';
+        for(let i = 0; i < store.length; i++){
+          let todo = store[i];
+          renderTodo(todo);
+        }
+      }
+
+      addToDoButton.addEventListener('click', function() {
+        let todo = inputFild.value;
+        addToDo(todo);
+        inputFild.value = '';
+      });
+
+      buildStore();
+
+  </script>
+  
+</body>
+</html>
